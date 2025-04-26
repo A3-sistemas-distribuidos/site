@@ -14,6 +14,36 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
+app.post('/postar_reserva', async (req, res) => {
+    try {
+        const {nome_responsavel,
+            data_reserva,
+            hora,
+            mesa,
+            qtd_pessoas
+        } = req.body;
+        
+    const {data: reseva, error} = await supabase.from('reserva').insert({
+        nome_responsavel: nome_responsavel,
+        data_reserva: data_reserva,
+        hora: hora,
+        mesa: mesa,
+        qtd_pessoas: qtd_pessoas
+    }).select().single();
+
+    if (error) throw error;
+
+    } catch (error) {
+        console.error('Erro ao criar questão:', error);
+
+        res.status(500).json({
+            mensagem: 'Error ao criar questão',
+            detalhe: error.message || 'Error desconhecido',
+            supabase: error.details || null})
+    }
+});
+
+
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
