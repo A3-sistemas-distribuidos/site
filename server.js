@@ -70,6 +70,103 @@ app.post('/postar_reserva', async (req, res) => {
     }
 });
 
+//endpoint responsável por deletar a reserva selecionada
+app.delete('/deletar_reserva', async (req, res) => {
+    try {
+        //responsável por pegar os parâmetros de entrada
+        const {id} = req.body;
+
+        //faz a consulta no banco de dados
+        const {data: reserva_existente, error: queryError} = await supabase.from('reserva')
+            .select('*').eq('id', id).maybeSingle();
+        
+        //caso dê erro na leitura da query
+        if (queryError) {
+            return res.status(500).json({error: 'Erro ao buscar reserva.'});
+        }
+
+        //caso a reserva não exista
+        if (!reserva_existente) {
+            return res.status(404).json({error: 'Reserva não encontrada.'});
+        }
+
+        //caso ela exista irá deletar
+        const {error: erroDelete} = await supabase.from('reserva').delete()
+            .eq('id', id);
+        
+        //caso dê erro no delete
+        if (erroDelete) {
+            return res.status(500).json({error: 'Erro ao deletar a reserva.'});
+        }
+
+        //resposta positiva caso seja deletado
+        res.status(201).json({
+            sucess: true,
+            mensagem: 'Reserva deletada com sucesso',
+        });
+
+    } catch (error) {
+        console.error('Erro ao deletar reserva:', error);
+
+        res.status(500).json({
+            sucess: false,
+            mensagem: 'Error ao deletar reserva',
+            detalhe: error.message || 'Error desconhecido',
+            supabase: error.details || null
+        });
+    }
+});
+
+//endpoint de atualizacao de valores utilizado pelo garcom
+app.patch('/confirmacao_garcom', async (req, res) => {
+    try {
+        //variaveis que virão do front
+        const {id, descricao, status} = req.body;
+
+        //variáveis pre definidas
+        const data_confirmacao = new Date().toLocaleString('pt-BR', {
+            timeZone: 'America/Sao_Paulo',
+            hour12: false
+        });
+
+        //consulta separada para saber se existe uma reserva com o id fornecido
+        const {data: reservaExistente, error: erroBusca} = await supabase.from('reserva').select('id')
+            .eq('id', id).maybeSingle();
+
+        //caso dê erro na busca
+        if (erroBusca) {
+            return res.status(500).json({error: "Erro ao buscar reserva"});
+        }
+
+        //caso a reserva não exista
+        if (!reservaExistente) {
+            return res.status(404).json({error: 'Reserva não encontrada'});
+        }
+
+        //vai atualizar a reserva com os dados novos
+        const {data: reservaAtualizada, error: erroAtualizacao} = await supabase.from('reserva')
+            .update({status: status, data_confirmacao: data_confirmacao, descricao: descricao})
+            .eq('id', id).select();
+        
+        //caso dê erro na atualização
+        if (erroAtualizacao) {
+            return res.status(500).json({error: 'Erro ao atualizar.'})
+        }
+
+        //retorna resposta caso seja bem sucedido
+        return res.status(200).json({sucess: true, mensagem: 'Reseva atualizada com sucesso'})
+    } catch (error){
+        console.error('Erro ao atualizar reserva:', error);
+
+        res.status(500).json({
+            sucess: false,
+            mensagem: 'Error ao atualizar reserva',
+            detalhe: error.message || 'Error desconhecido',
+            supabase: error.details || null
+        });
+    }
+})
+
 //endpoint responsável por retornar as reservas não confirmadas pelo garçom
 app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
     try {
