@@ -17,6 +17,38 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
+//endpoint responsavel por retornar a relacao do login
+app.post('/login', async (req, res) => {
+    try {
+        //pega as variáveis de nome e senha do front-end
+        const {nome, senha} = req.body;
+
+        //faz a consulta no banco de dados com os dados vindos do front
+        const {data: consultaLogin, error: erroBusca} = await supabase.from("cadastro").select("relacao")
+            .eq("nome", nome).eq("senha_simulada", senha).maybeSingle();
+        
+        //caso dê erro na busca
+        if (erroBusca) {
+            return res.status(500).json({error: "Erro ao buscar reserva"});
+        }
+
+        //caso o cadastro não exista
+        if (consultaLogin === null) {
+            return res.status(404).json({error: 'Cadastro não encontrado'});
+        }
+
+        //retorna um json com a relacao caso não de nenhum erro
+        res.json(consultaLogin);
+    } catch (error) {
+        console.error('Erro ao consultar cadastro:', error);
+
+        res.status(500).json({
+            mensagem: 'Error ao consultar cadastro',
+            detalhe: error.message || 'Error desconhecido',
+            supabase: error.details || null})
+    }
+});
+
 //endpoint responsável por postar a reserva
 app.post('/postar_reserva', async (req, res) => {
     try {
