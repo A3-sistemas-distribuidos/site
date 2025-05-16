@@ -24,7 +24,7 @@ app.post('/login', async (req, res) => {
         const {nome, senha} = req.body;
 
         //faz a consulta no banco de dados com os dados vindos do front
-        const {data: consultaLogin, error: erroBusca} = await supabase.from("cadastro").select("relacao")
+        const {data: consultaLogin, error: erroBusca} = await supabase.from("cadastro").select("id, relacao")
             .eq("nome", nome).eq("senha_simulada", senha).maybeSingle();
         
         //caso dê erro na busca
@@ -37,11 +37,13 @@ app.post('/login', async (req, res) => {
             return res.status(404).json({error: 'Cadastro não encontrado'});
         }
 
-        //retorna um json com a relacao caso não de nenhum erro
-        res.json(consultaLogin);
+        //retorna um json com a relacao
+        res.json({
+            relacao: consultaLogin.relacao,
+            id: consultaLogin.id
+        });
     } catch (error) {
         console.error('Erro ao consultar cadastro:', error);
-
         res.status(500).json({
             mensagem: 'Error ao consultar cadastro',
             detalhe: error.message || 'Error desconhecido',
@@ -153,13 +155,15 @@ app.delete('/deletar_reserva', async (req, res) => {
 app.patch('/confirmacao_garcom', async (req, res) => {
     try {
         //variaveis que virão do front
-        const {id, descricao, status} = req.body;
+        const {id, descricao, status, garcom_id} = req.body;
+
+        console.log(garcom_id);
 
         //variáveis pre definidas
         const data_confirmacao = new Date().toLocaleString('pt-BR', {
             timeZone: 'America/Sao_Paulo',
             hour12: false
-        });
+        }).replace(/(\d{2})\/(\d{2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, '$3-$2-$1T$4.000Z');
 
         //consulta separada para saber se existe uma reserva com o id fornecido
         const {data: reservaExistente, error: erroBusca} = await supabase.from('reserva').select('id')
@@ -177,7 +181,7 @@ app.patch('/confirmacao_garcom', async (req, res) => {
 
         //vai atualizar a reserva com os dados novos
         const {data: reservaAtualizada, error: erroAtualizacao} = await supabase.from('reserva')
-            .update({status: status, data_confirmacao: data_confirmacao, descricao: descricao})
+            .update({status: status, id_garcom: garcom_id, data_confirmacao: data_confirmacao, descricao: descricao})
             .eq('id', id).select();
         
         //caso dê erro na atualização
@@ -186,12 +190,12 @@ app.patch('/confirmacao_garcom', async (req, res) => {
         }
 
         //retorna resposta caso seja bem sucedido
-        return res.status(200).json({sucess: true, mensagem: 'Reseva atualizada com sucesso'})
+        return res.status(200).json({success: true, mensagem: 'Reseva atualizada com sucesso'})
     } catch (error){
         console.error('Erro ao atualizar reserva:', error);
 
         res.status(500).json({
-            sucess: false,
+            success: false,
             mensagem: 'Error ao atualizar reserva',
             detalhe: error.message || 'Error desconhecido',
             supabase: error.details || null

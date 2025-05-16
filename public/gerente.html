@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página do Cliente Gerente</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <h2>Página do Cliente Gerente</h2>
+    <p>Visualizr e filtrarr as informações dos clientes.</p>
+
+    <div class="filtros">
+        <label for="filtro-id">Filtrar por ID do Cliente:</label>
+        <input type="text" id="filtro-id" placeholder="Digite o ID">
+
+        <label for="filtro-data">Filtrar por Data:</label>
+        <input type="date" id="filtro-data">
+
+        <label for="ordenar-por">Ordenar por:</label>
+        <select id="ordenar-por">
+            <option value="id">ID do Cliente</option>
+            </select>
+
+        <button onclick="filtrarDados()">Filtrar</button>
+    </div>
+
+    <table id="tabela-clientes">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Data da Reserva</th>
+                <th>Mesa</th>
+                <th>Status</th>
+                <th>Anotações do Garçom</th>
+                </tr>
+        </thead>
+        <tbody id="corpo-tabela">
+            </tbody>
+    </table>
+
+
+    <script>
+        const corpoTabela = document.getElementById('corpo-tabela');
+        const corpoDataInput = document.getElementById('filtro-data');
+        const filtroIdInput = document.getElementById('filtro-id');
+        const ordenarPorSelect = document.getElementById('ordenar-por');
+
+        
+        let dadosClientes = [
+            { id: 1, nome: 'João Silva', cpf: '123.456.789-00', mesa: 5, status: 'Confirmado', anotacoes: '' },
+            { id: 2, nome: 'Maria Oliveira', cpf: '987.654.321-11', mesa: 2, status: 'Presente', anotacoes: 'Pedido especial: sem glúten' },
+            { id: 3, nome: 'Carlos Pereira', cpf: '111.222.333-44', mesa: 8, status: 'Reservado', anotacoes: '' },
+            { id: 4, nome: 'Ana Souza', cpf: '555.444.333-22', mesa: 1, status: 'Ausente', anotacoes: 'Não compareceu' },
+            
+        ];
+
+        function exibirDados(clientes) {
+            corpoTabela.innerHTML = ''; 
+            clientes.forEach(cliente => {
+                const linha = corpoTabela.insertRow();
+                linha.insertCell().textContent = cliente.id;
+                linha.insertCell().textContent = cliente.nome;
+                linha.insertCell().textContent = cliente.cpf;
+                linha.insertCell().textContent = cliente.dataReserva;
+                linha.insertCell().textContent = cliente.mesa;
+                linha.insertCell().textContent = cliente.status;
+                linha.insertCell().textContent = cliente.anotacoes;
+            });
+        }
+
+        function filtrarDados() {
+            const filtroData = filtroDataInput.value;
+            const filtroId = filtroIdInput.value.toLowerCase();
+            const ordenarPor = ordenarPorSelect.value;
+
+            let dadosFiltrados = [...dadosClientes]; 
+
+            if (filtroId) {
+                dadosFiltrados = dadosFiltrados.filter(cliente => String(cliente.id).toLowerCase().includes(filtroId));
+            }
+            exibirDados(dadosFiltrados);
+        }
+
+        
+        exibirDados(dadosClientes);
+    </script>
+</body>
+</html>
