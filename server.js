@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const {createClient} = require('@supabase/supabase-js');
 const path = require('path');
+const ExcelJS = require('exceljs');
 
 //atribuições dos middlewares
 const app = express();
@@ -240,6 +241,101 @@ app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
             mensagem: 'Error ao consultar reserva',
             detalhe: error.message || 'Error desconhecido',
             supabase: error.details || null})
+    }
+});
+
+app.post('/relatorio', async (req, res) => {
+    try {
+        //variáveis que podem vir do front-end
+        const {status, data_inicio, data_final, mesa} = req.body;
+
+        //a query que vai selecionar os dados que vão ser retornados no xlsx
+        let query = supabase.from("reserva").select(`
+            nome_responsavel,
+            data_reserva,
+            hora,
+            mesa,
+            qtd_pessoas,
+            status,
+            id_garcom(nome),
+            data_confirmacao,
+            descricao,
+            cpf,
+            forma_pagamento
+            `);
+        
+        //filtros que a query vai passar caso a variável venha do front-end
+        if (mesa) {
+            query = query.eq("mesa", mesa); // numero da mesa
+        }
+        if (status) {
+            query = query.eq("status", status); // status da mesa
+        }
+        if (data_inicio && data_final) {
+            query = query.gte("data_reserva", data_inicio).lte("data_reserva", data_final); // intervalo de tempo
+        }
+
+        //aqui atribuimos a query a consulta
+        const {data: consulta, error: erroConsulta} = await query;
+
+        //caso ocorra um erro na consulta
+        if (erroConsulta) {
+            return res.status(500).json({error: "Erro ao achar consulta"})
+        }
+
+        //caso a consulta retorne vazia
+        if (!consulta || consulta.length === 0) {
+            return res.status(404).json({error: "Não há dados com esse filtro"})
+        }
+
+        //criação do objeto para o arquivo xlsx
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Reservas');
+
+        //criação dos cabeçalhos e sua formatação
+        worksheet.columns = [
+            {header: 'Nome Responsável', key: 'nome_responsavel', width: 20},
+            {header: 'Data Reserva', key: 'data_reserva', width: 15},
+            {header: 'Hora', key: 'hora', width: 10},
+            {header: 'Mesa', key: 'mesa', width: 10},
+            {header: 'Qtd Pessoas', key: 'qtd_pessoas', width: 12},
+            {header: 'Status', key: 'status', width: 25},
+            {header: 'Nome Garçom', key: 'nome_garcom', width: 25},
+            {header: 'Data Confirmação', key: 'data_confirmacao', width: 20},
+            {header: 'Descrição', key: 'descricao', width: 15},
+            {header: 'Cpf', key: 'cpf', width: 15},
+            {header: 'Forma de Pagamento', key: 'forma_pagamento', width: 15},
+        ];
+
+        //vai adicionar as linhas no arquivo
+        consulta.forEach(reserva => {
+            const nomeGarcom = reserva.id_garcom?.nome || "Sem garçom"
+
+            worksheet.addRow({
+                ...reserva,
+                nome_garcom: nomeGarcom
+            });
+        });
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = {bold: true};
+        });
+
+        const excelBuffer = await workbook.xlsx.writeBuffer();
+
+        const excelBase64 = excelBuffer.toString('base64');
+
+        res.json({
+            dados: consulta,
+            excel: {
+                fileName: 'relatoria_reservas.xlsx',
+                data: excelBase64,
+                mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }
+        });
+
+    } catch (error) {
+        console.error('Erro ao gerar relatório:', error);
+        return res.status(500).json({error: "Erro ao gerar relatório"});
     }
 });
 
