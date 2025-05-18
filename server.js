@@ -56,7 +56,7 @@ app.post('/login', async (req, res) => {
 app.post('/postar_reserva', async (req, res) => {
     try {
         //atribuição de variáveis vindas do front-end
-        const {nome_responsavel, data_reserva, hora, mesa, qtd_pessoas} = req.body;
+        const {nome_responsavel, data_reserva, hora, mesa, qtd_pessoas, cpf, forma_pagamento} = req.body;
         
         //consulta que vai ser responsável por dizer se já há uma reserva com aqueles dados
         const {data: reservaExistente, error: erroConsulta} = await supabase.from('reserva').select('*')
@@ -70,7 +70,6 @@ app.post('/postar_reserva', async (req, res) => {
             return res.status(400).json({
                 sucess: false,
                 mensagem: 'Já existe uma reserva para esta mesa no horário selecionado',
-                reserva_existente: reservaExistente
             })
         }
 
@@ -80,7 +79,9 @@ app.post('/postar_reserva', async (req, res) => {
             data_reserva: data_reserva,
             hora: hora,
             mesa: mesa,
-            qtd_pessoas: qtd_pessoas
+            qtd_pessoas: qtd_pessoas,
+            cpf: cpf,
+            forma_pagamento: forma_pagamento
         }).select().single();
 
         //caso dê erro na inserção
@@ -105,11 +106,51 @@ app.post('/postar_reserva', async (req, res) => {
     }
 });
 
+app.get('/verificar_status', async (req, res) => {
+    try {
+        const {mesa, data_reserva} = req.query;
+
+        let query = supabase.from('reserva').select(`
+            mesa,
+            data_reserva,
+            hora,
+            status
+            `).eq('mesa', mesa);
+        
+        query = query.eq('data_reserva', data_reserva);
+
+        query = query.eq('status', "Reservado" || "Reserva Cancelada");
+
+        const {data: verificacao, error: erroVerificacao} = await query;
+
+        if (!verificacao || verificacao.length === 0) {
+            return res.json({status: 1});
+        }
+
+        if (erroVerificacao) {
+            return res.status(500).json({error: "Erro ao achar"})
+        }
+
+        res.json(verificacao);
+    } catch (error) {
+        console.error('Erro ao verificar reserva:', error);
+
+        res.status(500).json({
+            sucess: false,
+            mensagem: 'Error ao verificar reserva',
+            detalhe: error.message || 'Error desconhecido',
+            supabase: error.details || null
+        });
+    }
+})
+
 //endpoint responsável por deletar a reserva selecionada
-app.delete('/deletar_reserva', async (req, res) => {
+app.patch('/cancelar_reserva', async (req, res) => {
     try {
         //responsável por pegar os parâmetros de entrada
         const {id} = req.body;
+
+        console.log(id);
 
         //faz a consulta no banco de dados
         const {data: reserva_existente, error: queryError} = await supabase.from('reserva')
@@ -126,11 +167,11 @@ app.delete('/deletar_reserva', async (req, res) => {
         }
 
         //caso ela exista irá deletar
-        const {error: erroDelete} = await supabase.from('reserva').delete()
-            .eq('id', id);
+        const {data: cancelamentoReserva, error: erroCancelamentoReserva} = await supabase.from('reserva')
+            .update({status: "Reserva Cancelada"}).eq('id', id).select();
         
         //caso dê erro no delete
-        if (erroDelete) {
+        if (erroCancelamentoReserva) {
             return res.status(500).json({error: 'Erro ao deletar a reserva.'});
         }
 
@@ -208,7 +249,7 @@ app.patch('/confirmacao_garcom', async (req, res) => {
 app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
     try {
         //pega a variável mesa
-        const {mesa} = req.query;
+        const {mesa, data_reserva, hora} = req.query;
 
         //query responsável por fazer a seleção dos dados relevantes
         let query = supabase.from('reserva').select(`
@@ -224,6 +265,8 @@ app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
         
         //filtros aplicados para que retorne apenas as mesas que não foram confirmadas
         if (mesa) query = query.eq('mesa', mesa);
+        if (data_reserva) query = query.eq('data_reserva', data_reserva);
+        if (hora) query = query.eq('hora', hora);
         query = query.is('data_confirmacao', null);
         
         //atribui os resultados para a variavel data

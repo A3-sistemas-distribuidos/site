@@ -15,13 +15,10 @@ document.getElementById("login").addEventListener("submit", async (e) => {
 
         const dados = await resposta.json();
 
-        console.log(dados);
-
         if (!resposta.ok) {
             console.error('Erro da API:', dados);
             alert(`Erro: ${dados.error}`);
         } else {
-            console.log('Cadastro encontrado com sucesso:', dados);
             alert('Cadastro encontrado com sucesso!');
 
             localStorage.setItem('usuario_id', dados.id);
@@ -33,7 +30,6 @@ document.getElementById("login").addEventListener("submit", async (e) => {
                 window.location.href = "/atendente.html";
                 break;
             case "garcom":
-                alert('Olha ai', dados.id);
                 window.location.href = `/garcom.html?id=${dados.id}`;
                 break;
             case "gerente":
