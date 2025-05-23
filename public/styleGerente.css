@@ -1,0 +1,85 @@
+body {
+    background-image: url('./assets/gerente/fundo_gerente.png');
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    background-attachment: fixed;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h2, p, label {
+    color: white;
+}
+
+.filtros {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    
+}
+
+.filtros label {
+    font-weight: bold;
+}
+
+.filtros input[type="text"],
+.filtros input[type="date"],
+.filtros select,
+.filtros button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filtros button {
+    background-color: #000000;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filtros button:hover {
+    background-color: #000000;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff; /* Fundo branco para a tabela */
+}
+
+th, td {
+    border: 1px solid #444; /* Bordas mais escuras */
+    padding: 12px; /* Aumente o padding para melhor legibilidade */
+    text-align: left;
+}
+
+th {
+    background-color: #222; /* Cabeçalho mais escuro */
+    color: white; /* Texto branco */
+    font-weight: bold;
+}
+
+/* Linhas alternadas escuras */
+tbody tr:nth-child(even) {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Linhas ímpares claras (opcional) */
+tbody tr:nth-child(odd) {
+    background-color: #444;
+    color: #fff;
+}
+
+/* Efeito hover */
+tbody tr:hover {
+    background-color: #555;
+}

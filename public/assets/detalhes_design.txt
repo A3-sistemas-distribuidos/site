@@ -1,0 +1,7 @@
+FONTES:
+Botões: Lucinda Caligraphy
+Texto Sistema: High Tower Text
+
+CORES:
+Amarelo: #FDBC00 - #D29200
+Vermelho:: #D1001B - #9B0014

@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página do Cliente Garçom</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styleGarcom.css">
     
 </head>
 <body>
     <h2>Página do Cliente Garçom</h2>
-    <p>Selecione uma mesa para verificar tudo.</p>
 
-    <div class="mesas-container" id="mesas-atendente">
+    <p>Escolha uma mesa para confirmar possíveis reservas!</p>
+
+    <div class="mesas-container" id="mesas-container">
         </div>
 
-    <div id="mostrar_resposta"></div>
+    <div id="modal-garcom" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="fecharModalGarcom()">&times;</span>
+            <h3>Reservas da Mesa <span id="numero-mesa-garcom"></span></h3>
+            <div id="conteudo-modal-garcom">
+            </div>
+        </div>
+    </div>
 
     <script src="scriptgarcom.js"></script>
+</body>
+</html>

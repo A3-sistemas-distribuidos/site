@@ -60,18 +60,22 @@ app.post('/postar_reserva', async (req, res) => {
         
         //consulta que vai ser responsável por dizer se já há uma reserva com aqueles dados
         const {data: reservaExistente, error: erroConsulta} = await supabase.from('reserva').select('*')
-            .eq('mesa', mesa).eq('data_reserva', data_reserva).eq('hora', hora).maybeSingle();
+            .eq('mesa', mesa).eq('data_reserva', data_reserva).eq('hora', hora);
 
         //Caso a consulta dê erro
         if (erroConsulta) throw erroConsulta;
 
         //caso já exista a reserva retorna a resposta
-        if (reservaExistente) {
-            return res.status(400).json({
-                sucess: false,
-                mensagem: 'Já existe uma reserva para esta mesa no horário selecionado',
+
+
+        reservaExistente.forEach(reserva => {
+            if (reserva.status != "Reserva Cancelada") {
+                return res.status(400).json({
+                    sucess: false,
+                    mensagem: 'Já existe uma reserva para esta mesa no horário selecionado',
             })
-        }
+            }
+        })
 
         //responsável por colocar a reserva no banco
         const {data: novaReseva, error: erroInsercao} = await supabase.from('reserva').insert({
@@ -265,6 +269,7 @@ app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
         
         //filtros aplicados para que retorne apenas as mesas que não foram confirmadas
         if (mesa) query = query.eq('mesa', mesa);
+        if (mesa && !data_reserva && !hora) query = query.eq('status', "Reservado")
         if (data_reserva) query = query.eq('data_reserva', data_reserva);
         if (hora) query = query.eq('hora', hora);
         query = query.is('data_confirmacao', null);
@@ -317,6 +322,10 @@ app.post('/relatorio', async (req, res) => {
         if (data_inicio && data_final) {
             query = query.gte("data_reserva", data_inicio).lte("data_reserva", data_final); // intervalo de tempo
         }
+        if (data_inicio && !data_final) {
+            query = query.eq('data_reserva', data_inicio);
+        }
+
 
         //aqui atribuimos a query a consulta
         const {data: consulta, error: erroConsulta} = await query;

@@ -7,22 +7,26 @@ const formularioReservaDiv = document.getElementById('formulario-reserva');
 let reservaAtual = {};
 let data_reserva;
 
-const mesas = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, status: 'disponível' }));
-
-mesas.forEach(mesa => {
-    const mesaDiv = document.createElement('div');
-    mesaDiv.classList.add('mesa');
-    mesaDiv.textContent = `Mesa ${mesa.id}`;
-    mesaDiv.onclick = () => {
-        const data_reserva_inicial = document.getElementById('data_reserva_inicial').value;
-        data_reserva = data_reserva_inicial;
-        if (!data_reserva_inicial) {
-            alert("Por favor, selecione uma data antes de escolher a mesa!")
-            return
-        }
-        mostrarHorarios(mesa.id, data_reserva_inicial)
-    };
-    mesasContainerAtendente.appendChild(mesaDiv);
+document.addEventListener('DOMContentLoaded', function() {
+    const mesasContainer = document.getElementById('mesas-atendente');
+    
+    // Cria as 10 mesas com imagens
+    for (let i = 1; i <= 10; i++) {
+        const mesaImg = document.createElement('img');
+        mesaImg.src = `./assets/atendente/mesa${i}.png`;
+        mesaImg.className = 'mesa-img';
+        mesaImg.alt = `Mesa ${i}`;
+        mesaImg.onclick = () => {
+            const data_reserva_inicial = document.getElementById('data_reserva_inicial').value;
+            data_reserva = data_reserva_inicial;
+            if (!data_reserva_inicial) {
+                alert("Por favor, selecione uma data antes de escolher a mesa!")
+                return
+            }
+            mostrarHorarios(i, data_reserva_inicial)
+        };
+        mesasContainer.appendChild(mesaImg);
+    }
 });
 
 async function mostrarHorarios(mesaId, data_reserva_inicio) {
@@ -90,6 +94,7 @@ async function mostrarHorarios(mesaId, data_reserva_inicio) {
                 };
             } else {
                 horarioDiv.style.cursor = 'pointer';
+                horarioDiv.style.color = 'red';
                 horarioDiv.onclick = () => {
                     reservaAtual = {mesa: mesaId, hora: dado.hora};
                     mostrarReservas(mesaId, data_reserva, dado.hora); 
@@ -159,8 +164,14 @@ async function mostrarReservas(mesa, data_reserva, hora) {
     
         const [reserva] = await resposta.json();
 
+        horariosMesaDiv.style.display = 'none';
+        formularioReservaDiv.style.display = 'none';
+
+        const detalhesReservaDiv = document.createElement('div');
+        detalhesReservaDiv.id = 'detalhes-reserva';
+
         if (reserva && reserva.id) {
-            const htmlReserva = `
+            detalhesReservaDiv.innerHTML = `
                     <div>
                         <p><strong>Id:</strong> ${reserva.id}</p>
                         <p><strong>Nome:</strong> ${reserva.nome_responsavel}</p>
@@ -173,7 +184,8 @@ async function mostrarReservas(mesa, data_reserva, hora) {
                         <hr>
                     </div>
                 `;
-                document.getElementById('mostrar_resposta').innerHTML = htmlReserva;
+                modalReserva.querySelector('.modal-content').appendChild(detalhesReservaDiv);
+                modalReserva.style.display = 'block';
         } else {
             document.getElementById('mostrar_resposta').innerText = 'Nenhuma reserva'
         }
@@ -210,4 +222,9 @@ async function cancelar(id) {
 function fecharModal() {
     modalReserva.style.display = 'none';
     horariosMesaDiv.style.display = 'block';
+
+    const detalhesReserva = document.getElementById('detalhes-reserva');
+    if (detalhesReserva) {
+        detalhesReserva.remove();
+    }
 }

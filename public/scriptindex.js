@@ -17,7 +17,7 @@ document.getElementById("login").addEventListener("submit", async (e) => {
 
         if (!resposta.ok) {
             console.error('Erro da API:', dados);
-            alert(`Erro: ${dados.error}`);
+            alert(`${dados.error}`);
         } else {
             alert('Cadastro encontrado com sucesso!');
 
