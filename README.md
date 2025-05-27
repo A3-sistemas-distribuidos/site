@@ -40,8 +40,8 @@ Projeto de finalização do semestre, um site que registra reservas ou cancela e
 - Git e Github
 
 ## Participantes
-Rafael Rangel - rafael.profissional011@gmail.com
-Davi Floriano
-Paulo 
-Victor Botto
-Eduardo
+-Rafael Rangel - rafael.profissional011@gmail.com
+-Davi Floriano
+-Paulo 
+-Victor Botto
+-Eduardo
