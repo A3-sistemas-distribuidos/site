@@ -36,17 +36,17 @@ Projeto de finalização do semestre, um site que registra reservas ou cancela e
 
 > Dados para login:
 
-Atendente
-login: func_atendente
-senha: senhaatentende
--=-=-=-=-=-=-=-=
-Garçom
-login: func_garcom
-senha: senhagarcom
--=-=-=-=-=-=-=-=
-Gerente
-login: func_gerente
-senha: senhagerente
+Atendente  
+login: func_atendente  
+senha: senhaatentende  
+-=-=-=-=-=-=-=-=  
+Garçom  
+login: func_garcom  
+senha: senhagarcom  
+-=-=-=-=-=-=-=-=  
+Gerente  
+login: func_gerente  
+senha: senhagerente  
 
 ## Tecnologias
 - Javascript
@@ -59,8 +59,8 @@ senha: senhagerente
 - Git e Github
 
 ## Participantes
--Rafael Rangel - rafael.profissional011@gmail.com 
--Davi Floriano
--Paulo 
--Victor Botto
--Eduardo
+-Rafael Rangel - rafael.profissional011@gmail.com  
+-Davi Floriano  
+-Paulo  
+-Victor Botto  
+-Eduardo  
