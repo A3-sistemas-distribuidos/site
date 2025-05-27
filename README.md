@@ -34,6 +34,20 @@
 
 Projeto de finalização do semestre, um site que registra reservas ou cancela em um banco de dados pelo atendente,  atualiza seu estado como "confirmada" ou "Não confirmada" pelo garçom e gera relatórios pelo gerente baseado nos filtros possíveis.
 
+> Dados para login:
+
+Atendente
+login: func_atendente
+senha: senhaatentende
+-=-=-=-=-=-=-=-=
+Garçom
+login: func_garcom
+senha: senhagarcom
+-=-=-=-=-=-=-=-=
+Gerente
+login: func_gerente
+senha: senhagerente
+
 ## Tecnologias
 - Javascript
 - Node

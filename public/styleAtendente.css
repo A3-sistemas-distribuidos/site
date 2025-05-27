@@ -21,6 +21,16 @@ body {
     margin: 20px auto;
 }
 
+#container_cancelamento button {
+    background-color: #FDBC00;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 .mesa-img {
     width: 100%;
     max-width: 180px;
@@ -107,7 +117,7 @@ h2 {
 }
 
 .form-reserva button {
-    background-color: #000000;
+    background-color: #FDBC00;
     color: white;
     padding: 10px 15px;
     border: none;

@@ -172,7 +172,7 @@ async function mostrarReservas(mesa, data_reserva, hora) {
 
         if (reserva && reserva.id) {
             detalhesReservaDiv.innerHTML = `
-                    <div>
+                    <div id="container_cancelamento">
                         <p><strong>Id:</strong> ${reserva.id}</p>
                         <p><strong>Nome:</strong> ${reserva.nome_responsavel}</p>
                         <p><strong>Data:</strong> ${reserva.data_reserva}</p>
