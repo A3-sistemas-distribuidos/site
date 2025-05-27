@@ -61,6 +61,7 @@ function renderizarReservasNoModal(reservas) {
                     <p><strong>Status atual:</strong> ${reserva.status}</p>
                 </div>
                 
+                <form class="form-garcom">
                 <div class="reserva-controles">
                     <label>Atualizar status:</label>
                     <select class="status-atualizado" required>
@@ -72,20 +73,22 @@ function renderizarReservasNoModal(reservas) {
                     <label>Observação:</label>
                     <input type="text" class="observacao" placeholder="Digite uma observação" value="${reserva.descricao || ''}">
                     
-                    <button class="btn-atualizar" data-id="${reserva.id}">Atualizar Reserva</button>
+                    <button type="submit" class="btn-atualizar" data-id="${reserva.id}">Atualizar Reserva</button>
                 </div>
+                </form>
             </div>
             <hr>
         `;
     });
     
     conteudoModalGarcom.innerHTML = html;
-    
-    // Adiciona event listeners aos botões de atualização
-    document.querySelectorAll('.btn-atualizar').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const reservaId = this.getAttribute('data-id');
-            const reservaItem = this.closest('.reserva-item');
+    document.querySelectorAll('.form-garcom').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = this.querySelector('.btn-atualizar');
+            const reservaId = btn.getAttribute('data-id');
+            const reservaItem = btn.closest('.reserva-item');
             const status = reservaItem.querySelector('.status-atualizado').value;
             const observacao = reservaItem.querySelector('.observacao').value;
             const garcomId = localStorage.getItem('usuario_id');
@@ -94,6 +97,8 @@ function renderizarReservasNoModal(reservas) {
         });
     });
 }
+
+
 
 async function atualizar(id, status, descricao, garcom_id) {
 
