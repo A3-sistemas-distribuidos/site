@@ -55,7 +55,7 @@ app.post('/login', async (req, res) => {
 //endpoint responsável por postar a reserva
 app.post('/postar_reserva', async (req, res) => {
     try {
-        //atribuição de variáveis vindas do front-end
+        //atribuição de variáveis vindas do front
         const {nome_responsavel, data_reserva, hora, mesa, qtd_pessoas, cpf, forma_pagamento} = req.body;
         
         //consulta que vai ser responsável por dizer se já há uma reserva com aqueles dados
@@ -67,15 +67,14 @@ app.post('/postar_reserva', async (req, res) => {
 
         //caso já exista a reserva retorna a resposta
 
-
-        reservaExistente.forEach(reserva => {
-            if (reserva.status != "Reserva Cancelada") {
+        for (const reserva of reservaExistente) {
+            if (reserva.status !== "Reserva Cancelada") {
                 return res.status(400).json({
                     sucess: false,
-                    mensagem: 'Já existe uma reserva para esta mesa no horário selecionado',
-            })
+                    mensagem: 'Já existe uma reserva para esta mesa no horário selecionado'
+                });
             }
-        })
+        }
 
         //responsável por colocar a reserva no banco
         const {data: novaReseva, error: erroInsercao} = await supabase.from('reserva').insert({
@@ -154,8 +153,6 @@ app.patch('/cancelar_reserva', async (req, res) => {
         //responsável por pegar os parâmetros de entrada
         const {id} = req.body;
 
-        console.log(id);
-
         //faz a consulta no banco de dados
         const {data: reserva_existente, error: queryError} = await supabase.from('reserva')
             .select('*').eq('id', id).maybeSingle();
@@ -202,8 +199,6 @@ app.patch('/confirmacao_garcom', async (req, res) => {
     try {
         //variaveis que virão do front
         const {id, descricao, status, garcom_id} = req.body;
-
-        console.log(garcom_id);
 
         //variáveis pre definidas
         const data_confirmacao = new Date().toLocaleString('pt-BR', {
