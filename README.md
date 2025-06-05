@@ -104,8 +104,9 @@ senha: senhagerente
 - Para uso das funções do gerente:  
 1. Digite o número da mesa e clique em gerar para pegar todas as estatísticas daquela mesa.  
 2. Selecione uma data de início para caso queira as informações de uma data específica.  
-3. Selecione uma data de fim para caso queira estabelecer um intervalo de tempo.  
-4. Selecione um status da reserva para ver as reservas que foram canceladas, confirmadas, não confirmadas ou que ainda estão em status de aguardo, reservado.  
+3. Selecione uma data de fim para caso queira estabelecer um intervalo de tempo.
+4. Digite o nome de um garçom para ver todas as mesas relacionadas a ele.
+5. Selecione um status da reserva para ver as reservas que foram canceladas, confirmadas, não confirmadas ou que ainda estão em status de aguardo, reservado.  
 
 
 ## Participantes
