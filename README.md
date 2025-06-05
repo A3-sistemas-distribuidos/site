@@ -44,7 +44,7 @@ Projeto de finalização do semestre, um site que registra reservas ou cancela e
 - CSS3
 - Git e Github
 
-## Intalação
+## Instalação
 
 1. Clone o repositório:
 ```bash
