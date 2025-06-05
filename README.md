@@ -66,20 +66,20 @@ node server.js
 Atendente  
 login: Adriana
 senha: senhaatentende 
--   
+|  
 login: Silas
 senha: senhaatendente  
--  
+|  
 login: Bianca
 senha: senhaatentende  
 -=-=-=-=-=-=-=-=  
 Garçom  
 login: Lucas  
 senha: senhagarcom 
-- 
+|  
 login: Adrian  
 senha: senhagarcom  
--  
+|  
 login: Eliane  
 senha: senhagarcom  
 -=-=-=-=-=-=-=-=  
