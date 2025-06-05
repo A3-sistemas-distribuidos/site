@@ -65,13 +65,13 @@ node server.js
 
 Atendente  
 login: Adriana  
-senha: senhaatentende  
+senha: senhaatendente  
 |  
 login: Silas  
 senha: senhaatendente  
 |  
 login: Bianca  
-senha: senhaatentende  
+senha: senhaatendente  
 -=-=-=-=-=-=-=-=  
 Garçom  
 login: Lucas  
