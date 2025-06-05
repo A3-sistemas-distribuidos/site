@@ -87,6 +87,8 @@ Gerente
 login: Gilberto  
 senha: senhagerente     
 
+## Uso do Sistema  
+
 - Para uso das funções do atendente:  
 1. Coloque a data da reserva que deseja inserir ou cancelar.  
 2. Escolha um horário disponível para adicionar a reserva (clicando em cima do horário com letras pretas) ou para cancelar a reserva (clicando em cima do horário com letras vermelhas).  
