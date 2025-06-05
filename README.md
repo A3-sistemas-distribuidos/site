@@ -64,18 +64,18 @@ node server.js
 > Dados para login:
 
 Atendente  
-login: Adriana
-senha: senhaatentende 
+login: Adriana  
+senha: senhaatentende  
 |  
-login: Silas
+login: Silas  
 senha: senhaatendente  
 |  
-login: Bianca
+login: Bianca  
 senha: senhaatentende  
 -=-=-=-=-=-=-=-=  
 Garçom  
 login: Lucas  
-senha: senhagarcom 
+senha: senhagarcom  
 |  
 login: Adrian  
 senha: senhagarcom  
@@ -85,7 +85,7 @@ senha: senhagarcom
 -=-=-=-=-=-=-=-=  
 Gerente  
 login: Gilberto  
-senha: senhagerente    
+senha: senhagerente     
 
 ## Participantes
 -Davi Floriano  - daviflorianohermida@gmail.com  
