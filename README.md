@@ -34,20 +34,6 @@
 
 Projeto de finalização do semestre, um site que registra reservas ou cancela em um banco de dados pelo atendente,  atualiza seu estado como "confirmada" ou "Não confirmada" pelo garçom e gera relatórios pelo gerente baseado nos filtros possíveis.
 
-> Dados para login:
-
-Atendente  
-login: func_atendente  
-senha: senhaatentende  
--=-=-=-=-=-=-=-=  
-Garçom  
-login: func_garcom  
-senha: senhagarcom  
--=-=-=-=-=-=-=-=  
-Gerente  
-login: func_gerente  
-senha: senhagerente  
-
 ## Tecnologias
 - Javascript
 - Node
@@ -58,9 +44,53 @@ senha: senhagerente
 - CSS3
 - Git e Github
 
+## Intalação
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/A3-sistemas-distribuidos/site.git
+```
+
+2. instale as dependências:
+```bash
+npm install
+```
+
+3. Rode o projeto:
+```bash
+node server.js
+```
+
+> Dados para login:
+
+Atendente  
+login: Adriana
+senha: senhaatentende 
+-   
+login: Silas
+senha: senhaatendente  
+-  
+login: Bianca
+senha: senhaatentende  
+-=-=-=-=-=-=-=-=  
+Garçom  
+login: Lucas  
+senha: senhagarcom 
+- 
+login: Adrian  
+senha: senhagarcom  
+-  
+login: Eliane  
+senha: senhagarcom  
+-=-=-=-=-=-=-=-=  
+Gerente  
+login: Gilberto  
+senha: senhagerente    
+
 ## Participantes
+-Davi Floriano  - daviflorianohermida@gmail.com  
+-Eduardo  Estreça - eduardoestrela14@gmail.com  
+-Eraldino Lopes - eraldinoneto@gmail.com  
+-Paulo Victor -  pvjesus57@gmail.com  
 -Rafael Rangel - rafael.profissional011@gmail.com  
--Davi Floriano  
--Paulo  
--Victor Botto  
--Eduardo  
+-Victor Botto  -  victorbotto2004@gmail.com  

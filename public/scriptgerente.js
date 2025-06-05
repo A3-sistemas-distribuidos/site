@@ -6,7 +6,8 @@ document.getElementById('relatorio').addEventListener("submit", async (e) => {
         mesa: document.getElementById('mesa_relatorio').value || null,
         status: document.getElementById('status_relatorio').value,
         data_inicio: document.getElementById('data_inicio').value,
-        data_final: document.getElementById('data_final').value
+        data_final: document.getElementById('data_final').value,
+        nomeGarcom: document.getElementById('nomeGarcom').value
     };
 
     try {

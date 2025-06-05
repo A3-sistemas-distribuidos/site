@@ -290,7 +290,7 @@ app.get('/mostrar_reservas_nao_confirmadas', async (req, res) => {
 app.post('/relatorio', async (req, res) => {
     try {
         //variáveis que podem vir do front-end
-        const {status, data_inicio, data_final, mesa} = req.body;
+        const {status, data_inicio, data_final, mesa, nomeGarcom} = req.body;
 
         //a query que vai selecionar os dados que vão ser retornados no xlsx
         let query = supabase.from("reserva").select(`
@@ -319,6 +319,15 @@ app.post('/relatorio', async (req, res) => {
         }
         if (data_inicio && !data_final) {
             query = query.eq('data_reserva', data_inicio);
+        }
+        if (nomeGarcom) {
+            const { data: garcons, error: erroGarcom} = await supabase.from('cadastro').select('id')
+                .eq('nome', nomeGarcom);
+            if (!garcons || garcons.length === 0) {
+                return res.status(404).json({error: "Não há dados com esse filtro"})
+            }
+            const idGarcom = garcons?.[0]?.id
+            query = query.eq('id_garcom', idGarcom);
         }
 
 
