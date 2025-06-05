@@ -87,6 +87,25 @@ Gerente
 login: Gilberto  
 senha: senhagerente     
 
+- Para uso das funções do atendente:  
+1. Coloque a data da reserva que deseja inserir ou cancelar.  
+2. Escolha um horário disponível para adicionar a reserva (clicando em cima do horário com letras pretas) ou para cancelar a reserva (clicando em cima do horário com letras vermelhas).  
+3. Para criar uma reserva clique em um horário disponível e digite as informações pedidas, e então clique em confirmar reserva.  
+4. Para cancelar uma reserva clique em um horário com status “Reservado”, após isso clique em cancelar.  
+
+- Para uso das funções do garçom:  
+1. Clique na numeração da mesa que quer confirmar a reserva.  
+2. Atualize seu status para “Reserva Confirmada” para caso o cliente tenha confirmado, ou “Reserva não Confirmada” para caso da ausência do cliente.  
+3. coloque uma observação pertinente caso seja necessário.  
+5. clique em atualizar reserva.  
+
+- Para uso das funções do gerente:  
+1. Digite o número da mesa e clique em gerar para pegar todas as estatísticas daquela mesa.  
+2. Selecione uma data de início para caso queira as informações de uma data específica.  
+3. Selecione uma data de fim para caso queira estabelecer um intervalo de tempo.  
+4. Selecione um status da reserva para ver as reservas que foram canceladas, confirmadas, não confirmadas ou que ainda estão em status de aguardo, reservado.  
+
+
 ## Participantes
 -Davi Floriano  - daviflorianohermida@gmail.com  
 -Eduardo  Estreça - eduardoestrela14@gmail.com  
